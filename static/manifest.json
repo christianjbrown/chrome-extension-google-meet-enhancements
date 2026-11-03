@@ -2,7 +2,7 @@
   "manifest_version": 3,
   "name": "Christian's Google Meet Enhancements",
   "version": "1.0.0",
-  "description": "Small fixes for Google Meet. Mute the sound of one meeting window without touching the others, and start every meeting with your camera and mic off.",
+  "description": "Small fixes for Google Meet. Mute one meeting's sound without touching the others, and join every meeting with camera and mic off.",
   "minimum_chrome_version": "126",
   "icons": {
     "16": "icons/icon-16.png",
