@@ -11,6 +11,12 @@ describe("manifest", () => {
     ]);
   });
 
+  // The Chrome Web Store shows it as the listing's summary and refuses an
+  // upload whose description is longer.
+  it("has a description short enough for the Web Store summary", () => {
+    expect(manifestJson.description.length).toBeLessThanOrEqual(132);
+  });
+
   it("has a service worker, which is what can mute a tab", () => {
     expect(manifestJson.background).toEqual({
       service_worker: "background.js",

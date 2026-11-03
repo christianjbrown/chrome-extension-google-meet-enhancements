@@ -2,6 +2,8 @@
 
 A little Chrome extension that smooths out the bits of Google Meet that bug me. Right now that's two things, and it's built to collect more. No options page, no toolbar button, no settings. It just quietly makes Meet nicer.
 
+![Two meetings side by side: the left one muted with a red speaker button at the top, the right one still playing](docs/screenshot.png)
+
 ## Enhancements ✨
 
 - **Mute one meeting's sound.** A speaker button at the top of every meeting silences what that meeting window plays, and only that one. Sat in two meetings at once? Listen to one and park the other. 🔇
@@ -24,6 +26,8 @@ What it leaves alone 🙅:
 ## What quiet start does 🤫
 
 Meet remembers whether your camera and mic were on last time, and sometimes switches them on for you in the pre-join screen. This turns them off before you join:
+
+![Meet's pre-join screen with the camera and mic both switched off](docs/quiet-start.png)
 
 - **Anything on before you touch anything goes off.** Until you first click or press a key in the meeting, whatever's on is Meet's idea, not yours, so it gets switched off. That includes a camera that only wakes up a few seconds in.
 - **Your first click or key press, and it backs off.** Turn your mic back on in the pre-join screen and it stays on. Joining always takes a click or Enter, so it never touches anything once you're in the call.
