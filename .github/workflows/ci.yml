@@ -1,0 +1,31 @@
+name: CI
+
+# Every gate there is, through the same entry point the pre-push hook uses, so a
+# push that passed locally passes here.
+
+on:
+  pull_request:
+  push:
+    branches: [main]
+
+# A newer push to a pull request makes the older run's answer irrelevant, so it is cancelled.
+# Pushes to main are grouped by commit, so they never cancel each other.
+concurrency:
+  group: ${{ github.workflow }}-${{ github.event.pull_request.number || github.sha }}
+  cancel-in-progress: ${{ github.event_name == 'pull_request' }}
+
+permissions:
+  contents: read
+
+jobs:
+  gates:
+    name: Gates
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 24
+          cache: npm
+      - run: npm ci
+      - run: npm run ci
