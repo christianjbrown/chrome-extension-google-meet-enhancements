@@ -26,10 +26,13 @@ export interface MuteChanged {
 }
 
 export function isMuteChanged(message: unknown): message is MuteChanged {
-  return (
-    typeof message === "object" &&
-    message !== null &&
-    (message as Partial<MuteChanged>).type === MUTE_CHANGED &&
-    typeof (message as Partial<MuteChanged>).muted === "boolean"
-  );
+  return isObject(message) && hasMuteChangedFields(message);
+}
+
+function isObject(message: unknown): message is object {
+  return typeof message === "object" && message !== null;
+}
+
+function hasMuteChangedFields(message: Partial<MuteChanged>): boolean {
+  return message.type === MUTE_CHANGED && typeof message.muted === "boolean";
 }

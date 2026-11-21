@@ -6,16 +6,23 @@ import type { MuteAnswerer } from "./muter";
 
 export type Respond = (answer: MuteState | undefined) => void;
 
+// Whoever sent the request: a Meet page has a tab, anything else may not.
+interface RequestSender {
+  tab?: { id?: number | undefined } | undefined;
+}
+
+const tabIdOf = (sender: RequestSender): number | undefined => sender.tab?.id;
+
 export class RequestRouter {
   constructor(private readonly answerer: MuteAnswerer) {}
 
   // Returns whether the reply channel stays open until the answer arrives.
   onMessage(
     request: MuteRequest,
-    sender: { tab?: { id?: number | undefined } | undefined },
+    sender: RequestSender,
     respond: Respond,
   ): boolean {
-    const tabId = sender.tab?.id;
+    const tabId = tabIdOf(sender);
     if (tabId === undefined) return false;
     this.answerer.answer(request, tabId).then(respond, () => {
       respond(undefined);
