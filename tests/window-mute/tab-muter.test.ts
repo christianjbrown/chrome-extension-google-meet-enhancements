@@ -4,7 +4,6 @@ function fakeTabs(mutedInfo?: { muted: boolean }) {
   return {
     get: vi.fn().mockResolvedValue(mutedInfo ? { mutedInfo } : {}),
     update: vi.fn().mockResolvedValue({}),
-    sendMessage: vi.fn().mockResolvedValue(undefined),
   };
 }
 
@@ -44,26 +43,5 @@ describe("TabMuter", () => {
 
     expect(tabs.update).toHaveBeenCalledWith(7, { muted: false });
     expect(state).toEqual({ muted: false });
-  });
-
-  it("tells a tab its sound changed", () => {
-    const tabs = fakeTabs();
-
-    new TabMuter(tabs).tell(7, true);
-
-    expect(tabs.sendMessage).toHaveBeenCalledWith(7, {
-      type: "mute-changed",
-      muted: true,
-    });
-  });
-
-  it("shrugs off a tab with nobody listening", async () => {
-    const tabs = fakeTabs();
-    const failed = Promise.reject(new Error("Receiving end does not exist"));
-    tabs.sendMessage.mockReturnValue(failed);
-
-    new TabMuter(tabs).tell(7, true);
-
-    await expect(failed.catch(() => "handled")).resolves.toBe("handled");
   });
 });

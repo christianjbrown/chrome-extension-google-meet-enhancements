@@ -40,4 +40,8 @@ describe("LiveDevices", () => {
 
     expect(pressed).toEqual([]);
   });
+
+  it("names the attribute that tells it a device was switched on", () => {
+    expect(LiveDevices.WATCHED_ATTRIBUTES).toEqual(["data-is-muted"]);
+  });
 });

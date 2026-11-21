@@ -5,7 +5,7 @@ function setup() {
     answer: vi.fn().mockResolvedValue({ muted: true }),
     tell: vi.fn(),
   };
-  return { muter, router: new WorkerRouter(muter) };
+  return { muter, router: new WorkerRouter(muter, muter) };
 }
 
 describe("WorkerRouter", () => {

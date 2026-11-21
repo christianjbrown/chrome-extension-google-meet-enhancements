@@ -1,16 +1,16 @@
 // Finds Meet's microphone and camera buttons that are switched on, and presses
 // them. Meet marks both with data-is-muted, in the pre-join screen and the
 // call alike, so this works in any language.
-export interface Devices {
-  turnOffAll(): void;
-  turnOff(node: Node): void;
-}
+import type { Devices } from "./devices";
 
 // The attribute Meet puts on its device buttons, and the value while on.
-export const MUTED_ATTRIBUTE = "data-is-muted";
+const MUTED_ATTRIBUTE = "data-is-muted";
 const SWITCHED_ON_VALUE = "false";
 
-const switchedOn = `[${MUTED_ATTRIBUTE}="${SWITCHED_ON_VALUE}"]:is(button, [role="button"])`;
+// Meet draws some device buttons as buttons and some as divs playing one.
+const BUTTON_LIKE = ':is(button, [role="button"])';
+
+const switchedOn = `[${MUTED_ATTRIBUTE}="${SWITCHED_ON_VALUE}"]${BUTTON_LIKE}`;
 
 // Node.nodeType values, read off the node so no page class is needed.
 const ELEMENT_NODE = 1;
@@ -28,6 +28,10 @@ function isMatchable(node: Node): node is Matchable {
 }
 
 export class LiveDevices implements Devices {
+  // The attributes whose changes can switch a device on, for main.ts to hand
+  // to whatever watches the page.
+  static readonly WATCHED_ATTRIBUTES: readonly string[] = [MUTED_ATTRIBUTE];
+
   constructor(private readonly page: Node) {}
 
   turnOffAll(): void {

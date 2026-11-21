@@ -2,12 +2,7 @@
 // only part of the extension allowed to mute a tab.
 import { isMuteChanged, MUTE_REQUEST } from "./messages";
 import type { MuteRequest, MuteState } from "./messages";
-
-export interface Switch {
-  state(): Promise<boolean>;
-  toggle(): Promise<boolean>;
-  onChange(listener: (muted: boolean) => void): void;
-}
+import type { Switch } from "./switch";
 
 export interface Runtime {
   sendMessage(message: MuteRequest): Promise<MuteState | undefined>;

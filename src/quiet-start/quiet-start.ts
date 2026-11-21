@@ -3,8 +3,8 @@
 // so it gets turned off. From your first click or key on, it's hands off, and
 // joining always takes one, so it never fights you inside the call.
 import type { Enhancement } from "../enhancement";
-import type { Watcher } from "../node-watcher";
-import type { Devices } from "./live-devices";
+import type { Watcher } from "../watcher";
+import type { Devices } from "./devices";
 import type { MeetingChanges } from "./meeting-changes";
 import type { UserInput } from "./user-input";
 
