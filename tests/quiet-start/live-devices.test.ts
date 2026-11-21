@@ -41,6 +41,16 @@ describe("LiveDevices", () => {
     expect(pressed).toEqual([]);
   });
 
+  it("leaves alone a match that cannot be pressed", () => {
+    const pressed = buttons(`
+      <svg id="drawing" role="button" data-is-muted="false"></svg>
+      <button id="camera" data-is-muted="false"></button>`);
+
+    new LiveDevices(document).turnOffAll();
+
+    expect(pressed).toEqual(["camera"]);
+  });
+
   it("names the attribute that tells it a device was switched on", () => {
     expect(LiveDevices.WATCHED_ATTRIBUTES).toEqual(["data-is-muted"]);
   });
