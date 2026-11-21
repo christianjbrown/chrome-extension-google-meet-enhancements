@@ -1,6 +1,7 @@
 // A button that mutes the sound coming out of this meeting's window, and only
 // this one, so two meetings at once can each be heard or silenced on their own.
 import type { Enhancement } from "../enhancement";
+import { NAVIGATE_SUCCESS } from "../event-source";
 import type { EventSource } from "../event-source";
 import type { Page } from "./meeting-page";
 import type { Button } from "./mute-button";
@@ -28,7 +29,7 @@ export class WindowMute implements Enhancement {
     this.sound.state().then(set, ignore);
     this.place();
     // Meet moves between its landing page and a meeting without reloading.
-    this.navigation.addEventListener("navigatesuccess", () => {
+    this.navigation.addEventListener(NAVIGATE_SUCCESS, () => {
       this.place();
     });
   }

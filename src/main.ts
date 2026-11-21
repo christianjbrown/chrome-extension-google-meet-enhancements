@@ -2,8 +2,10 @@
 // touches the page's globals.
 import type { Enhancement } from "./enhancement";
 import { NodeWatcher } from "./node-watcher";
-import { LiveDevices } from "./quiet-start/live-devices";
+import { LiveDevices, MUTED_ATTRIBUTE } from "./quiet-start/live-devices";
+import { NavigationMeetings } from "./quiet-start/meeting-changes";
 import { QuietStart } from "./quiet-start/quiet-start";
+import { PageInput } from "./quiet-start/user-input";
 import { MeetingPage } from "./window-mute/meeting-page";
 import { MuteButton } from "./window-mute/mute-button";
 import { WindowMute } from "./window-mute/window-mute";
@@ -22,10 +24,10 @@ function quietStart(): Enhancement {
   return new QuietStart(
     new LiveDevices(document),
     new NodeWatcher((callback) => new MutationObserver(callback), document, [
-      "data-is-muted",
+      MUTED_ATTRIBUTE,
     ]),
-    window,
-    navigation,
+    new PageInput(window),
+    new NavigationMeetings(navigation),
   );
 }
 

@@ -7,3 +7,6 @@ export interface EventSource {
     options?: AddEventListenerOptions,
   ): void;
 }
+
+// Fired on the navigation when Meet moves to another address without reloading.
+export const NAVIGATE_SUCCESS = "navigatesuccess";

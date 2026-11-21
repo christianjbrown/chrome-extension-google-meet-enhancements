@@ -6,7 +6,26 @@ export interface Devices {
   turnOff(node: Node): void;
 }
 
-const switchedOn = '[data-is-muted="false"]:is(button, [role="button"])';
+// The attribute Meet puts on its device buttons, and the value while on.
+export const MUTED_ATTRIBUTE = "data-is-muted";
+const SWITCHED_ON_VALUE = "false";
+
+const switchedOn = `[${MUTED_ATTRIBUTE}="${SWITCHED_ON_VALUE}"]:is(button, [role="button"])`;
+
+// Node.nodeType values, read off the node so no page class is needed.
+const ELEMENT_NODE = 1;
+const DOCUMENT_NODE = 9;
+
+type Searchable = Node & ParentNode;
+type Matchable = Searchable & Element;
+
+function isSearchable(node: Node): node is Searchable {
+  return node.nodeType === ELEMENT_NODE || node.nodeType === DOCUMENT_NODE;
+}
+
+function isMatchable(node: Node): node is Matchable {
+  return node.nodeType === ELEMENT_NODE;
+}
 
 export class LiveDevices implements Devices {
   constructor(private readonly page: Node) {}
@@ -17,9 +36,9 @@ export class LiveDevices implements Devices {
 
   turnOff(node: Node): void {
     // The whole page is a Document, and only an Element can itself match.
-    if (!(node instanceof Element || node instanceof Document)) return;
+    if (!isSearchable(node)) return;
     const found = [...node.querySelectorAll<HTMLElement>(switchedOn)];
-    if (node instanceof Element && node.matches(switchedOn))
+    if (isMatchable(node) && node.matches(switchedOn))
       found.unshift(node as HTMLElement);
     for (const button of found) button.click();
   }
