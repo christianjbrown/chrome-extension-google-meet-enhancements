@@ -98,13 +98,14 @@ How it fits together, all in `src`:
   - **`mute-button.ts`** draws the button in its own shadow root, so Meet's styles can't touch it.
   - **`meeting-page.ts`** says whether the address is a meeting.
   - **`worker-switch.ts`** is the page's side of the conversation with the service worker.
-  - **`tab-muter.ts`** is the service worker's side: reads, flips and announces a tab's mute state.
+  - **`worker-router.ts`** is the service worker's side: it takes each request from a tab and each change to a tab's sound to the right place.
+  - **`tab-muter.ts`** reads and flips a tab's mute state, and **`tab-teller.ts`** tells the tab when it changes.
   - **`messages.ts`** is what the two sides say to each other.
 - **`quiet-start/`** starts meetings with the camera and mic off:
   - **`quiet-start.ts`** switches things off until your first click or key, and starts again in a new meeting.
   - **`live-devices.ts`** finds Meet's mic and camera buttons marked `data-is-muted="false"` and presses them.
 
-Every class gets its collaborators through its constructor, behind an interface, so each one is tested on its own with fakes. Adding the next enhancement means a new class and one more line in the list in `main.ts`. 🧩
+Every class gets its collaborators through its constructor, behind an interface that lives in its own small file (`watcher.ts`, `button.ts`, `devices.ts` and friends), so each one is tested on its own with fakes. Adding the next enhancement means a new class and one more line in the list in `main.ts`. 🧩
 
 ## Licence 📄
 
