@@ -2,6 +2,9 @@
 // element whose watched attributes change.
 import type { Watcher } from "./watcher";
 
+// The record type a MutationObserver gives an attribute change.
+const ATTRIBUTE_CHANGE: MutationRecordType = "attributes";
+
 export type ObserverFactory = (callback: MutationCallback) => MutationObserver;
 
 export class NodeWatcher implements Watcher {
@@ -14,7 +17,7 @@ export class NodeWatcher implements Watcher {
   watch(changed: (node: Node) => void): () => void {
     const observer = this.observe((records) => {
       for (const record of records) {
-        if (record.type === "attributes") changed(record.target);
+        if (record.type === ATTRIBUTE_CHANGE) changed(record.target);
         record.addedNodes.forEach((node) => {
           changed(node);
         });
