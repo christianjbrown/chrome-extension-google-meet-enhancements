@@ -1,17 +1,18 @@
 // The service worker: hooks chrome's events up to the routers.
-import { MUTE_REQUEST } from "./window-mute/messages";
 import type { MuteRequest } from "./window-mute/messages";
 import type { MuteRequestHandlers } from "./window-mute/mute-request-handler";
 import { ReportMute } from "./window-mute/report-mute";
 import { RequestRouter } from "./window-mute/request-router";
 import { SoundChangeRouter } from "./window-mute/sound-change-router";
+import { STATE_REQUEST } from "./window-mute/state-request";
 import { TabMuter } from "./window-mute/tab-muter";
 import { TabTeller } from "./window-mute/tab-teller";
 import { ToggleMute } from "./window-mute/toggle-mute";
+import { TOGGLE_REQUEST } from "./window-mute/toggle-request";
 
 const handlers = {
-  [MUTE_REQUEST.state]: new ReportMute(),
-  [MUTE_REQUEST.toggle]: new ToggleMute(chrome.tabs),
+  [STATE_REQUEST]: new ReportMute(),
+  [TOGGLE_REQUEST]: new ToggleMute(chrome.tabs),
 } satisfies MuteRequestHandlers;
 
 const requests = new RequestRouter(new TabMuter(chrome.tabs, handlers));

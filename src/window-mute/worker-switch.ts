@@ -1,8 +1,10 @@
 // The page's side of the conversation with the service worker, which is the
 // only part of the extension allowed to mute a tab.
-import { isMuteChanged, MUTE_REQUEST } from "./messages";
+import { isMuteChanged } from "./messages";
 import type { MuteRequest, MuteState } from "./messages";
+import { STATE_REQUEST } from "./state-request";
 import type { Switch } from "./switch";
+import { TOGGLE_REQUEST } from "./toggle-request";
 
 export interface Runtime {
   sendMessage(message: MuteRequest): Promise<MuteState | undefined>;
@@ -15,11 +17,11 @@ export class WorkerSwitch implements Switch {
   constructor(private readonly runtime: Runtime) {}
 
   state(): Promise<boolean> {
-    return this.ask({ type: MUTE_REQUEST.state });
+    return this.ask({ type: STATE_REQUEST });
   }
 
   toggle(): Promise<boolean> {
-    return this.ask({ type: MUTE_REQUEST.toggle });
+    return this.ask({ type: TOGGLE_REQUEST });
   }
 
   onChange(listener: (muted: boolean) => void): void {

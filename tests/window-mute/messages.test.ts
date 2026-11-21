@@ -1,8 +1,6 @@
-import {
-  isMuteChanged,
-  MUTE_CHANGED,
-  MUTE_REQUEST,
-} from "../../src/window-mute/messages";
+import { isMuteChanged, MUTE_CHANGED } from "../../src/window-mute/messages";
+import { STATE_REQUEST } from "../../src/window-mute/state-request";
+import { TOGGLE_REQUEST } from "../../src/window-mute/toggle-request";
 
 describe("isMuteChanged", () => {
   it("accepts a mute change", () => {
@@ -24,10 +22,8 @@ describe("isMuteChanged", () => {
 // contract between them. Changing one needs a deliberate edit here.
 describe("message names", () => {
   it("keeps the wire values the two sides agree on", () => {
-    expect(MUTE_REQUEST).toEqual({
-      state: "mute-state",
-      toggle: "toggle-mute",
-    });
+    expect(STATE_REQUEST).toBe("mute-state");
+    expect(TOGGLE_REQUEST).toBe("toggle-mute");
     expect(MUTE_CHANGED).toBe("mute-changed");
   });
 });
