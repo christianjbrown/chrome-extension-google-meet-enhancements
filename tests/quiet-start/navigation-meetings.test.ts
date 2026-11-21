@@ -1,4 +1,4 @@
-import { NavigationMeetings } from "../../src/quiet-start/meeting-changes";
+import { NavigationMeetings } from "../../src/quiet-start/navigation-meetings";
 
 function setup(url: string | null = "https://meet.google.com/abc-defg-hij") {
   const navigation: EventTarget & {

@@ -3,13 +3,7 @@
 // with a struck-through speaker while you can't, like Meet's own mic button.
 import { ICON_VIEW_BOX, SPEAKER, SPEAKER_OFF } from "./mute-icons";
 import { MUTE_BUTTON_STYLE, PRESSED_ATTRIBUTE } from "./mute-button-style";
-
-export interface Button {
-  show(): void;
-  hide(): void;
-  set(muted: boolean): void;
-  onPress(listener: () => void): void;
-}
+import type { Button } from "./button";
 
 const HOST_TAG = "meet-enhancements-mute";
 

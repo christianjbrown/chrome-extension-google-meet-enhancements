@@ -3,9 +3,9 @@
 import type { Enhancement } from "../enhancement";
 import { NAVIGATE_SUCCESS } from "../event-source";
 import type { EventSource } from "../event-source";
-import type { Page } from "./meeting-page";
-import type { Button } from "./mute-button";
-import type { Switch } from "./worker-switch";
+import type { Button } from "./button";
+import type { Page } from "./page";
+import type { Switch } from "./switch";
 
 export class WindowMute implements Enhancement {
   constructor(

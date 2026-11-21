@@ -1,10 +1,7 @@
 // Finds Meet's microphone and camera buttons that are switched on, and presses
 // them. Meet marks both with data-is-muted, in the pre-join screen and the
 // call alike, so this works in any language.
-export interface Devices {
-  turnOffAll(): void;
-  turnOff(node: Node): void;
-}
+import type { Devices } from "./devices";
 
 // The attribute Meet puts on its device buttons, and the value while on.
 const MUTED_ATTRIBUTE = "data-is-muted";

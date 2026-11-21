@@ -1,4 +1,4 @@
-import { PageInput } from "../../src/quiet-start/user-input";
+import { PageInput } from "../../src/quiet-start/page-input";
 
 function setup() {
   const heard: Record<string, (event: Event) => void> = {};

@@ -3,9 +3,9 @@
 import type { Enhancement } from "./enhancement";
 import { NodeWatcher } from "./node-watcher";
 import { LiveDevices } from "./quiet-start/live-devices";
-import { NavigationMeetings } from "./quiet-start/meeting-changes";
+import { NavigationMeetings } from "./quiet-start/navigation-meetings";
+import { PageInput } from "./quiet-start/page-input";
 import { QuietStart } from "./quiet-start/quiet-start";
-import { PageInput } from "./quiet-start/user-input";
 import { MeetingPage } from "./window-mute/meeting-page";
 import { MuteButton } from "./window-mute/mute-button";
 import { WindowMute } from "./window-mute/window-mute";
