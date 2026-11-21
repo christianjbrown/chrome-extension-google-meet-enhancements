@@ -1,8 +1,8 @@
 // Answers "is this tab muted?" without changing anything.
-import type { MuteRequestHandler } from "./mute-request-handler";
+import type { MuteRequestHandler, TabSoundNow } from "./mute-request-handler";
 
 export class ReportMute implements MuteRequestHandler {
-  handle(_tabId: number, muted: boolean): Promise<boolean> {
-    return Promise.resolve(muted);
+  handle(tab: TabSoundNow): Promise<boolean> {
+    return Promise.resolve(tab.muted);
   }
 }

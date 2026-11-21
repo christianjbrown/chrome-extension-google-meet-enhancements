@@ -1,5 +1,5 @@
 // Flips a tab's sound: mutes it if it was audible, unmutes it if it was muted.
-import type { MuteRequestHandler } from "./mute-request-handler";
+import type { MuteRequestHandler, TabSoundNow } from "./mute-request-handler";
 
 export interface TabSoundSetter {
   update(tabId: number, properties: { muted: boolean }): Promise<unknown>;
@@ -8,7 +8,7 @@ export interface TabSoundSetter {
 export class ToggleMute implements MuteRequestHandler {
   constructor(private readonly tabs: TabSoundSetter) {}
 
-  async handle(tabId: number, muted: boolean): Promise<boolean> {
+  async handle({ tabId, muted }: TabSoundNow): Promise<boolean> {
     await this.tabs.update(tabId, { muted: !muted });
     return !muted;
   }

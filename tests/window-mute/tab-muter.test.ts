@@ -23,7 +23,7 @@ describe("TabMuter", () => {
     }).answer({ type: "toggle-mute" }, 7);
 
     expect(tabs.get).toHaveBeenCalledWith(7);
-    expect(toggle.handle).toHaveBeenCalledWith(7, true);
+    expect(toggle.handle).toHaveBeenCalledWith({ tabId: 7, muted: true });
     expect(state.handle).not.toHaveBeenCalled();
     expect(answer).toEqual({ muted: false });
   });
@@ -36,6 +36,6 @@ describe("TabMuter", () => {
       "toggle-mute": fakeHandler(true),
     }).answer({ type: "mute-state" }, 7);
 
-    expect(state.handle).toHaveBeenCalledWith(7, false);
+    expect(state.handle).toHaveBeenCalledWith({ tabId: 7, muted: false });
   });
 });
