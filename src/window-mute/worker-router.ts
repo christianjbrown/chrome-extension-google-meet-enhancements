@@ -2,16 +2,15 @@
 // asks about, and tells a tab whenever its sound changes. worker.ts only
 // hooks these up to chrome's events.
 import type { MuteRequest, MuteState } from "./messages";
-
-export interface Muter {
-  answer(request: MuteRequest, tabId: number): Promise<MuteState>;
-  tell(tabId: number, muted: boolean): void;
-}
+import type { MuteAnswerer, MuteTeller } from "./muter";
 
 export type Respond = (answer: MuteState | undefined) => void;
 
 export class WorkerRouter {
-  constructor(private readonly muter: Muter) {}
+  constructor(
+    private readonly answerer: MuteAnswerer,
+    private readonly teller: MuteTeller,
+  ) {}
 
   // Returns whether the reply channel stays open until the answer arrives.
   onMessage(
@@ -21,7 +20,7 @@ export class WorkerRouter {
   ): boolean {
     const tabId = sender.tab?.id;
     if (tabId === undefined) return false;
-    this.muter.answer(request, tabId).then(respond, () => {
+    this.answerer.answer(request, tabId).then(respond, () => {
       respond(undefined);
     });
     return true;
@@ -31,6 +30,6 @@ export class WorkerRouter {
     tabId: number,
     change: { mutedInfo?: { muted: boolean } | undefined },
   ): void {
-    if (change.mutedInfo) this.muter.tell(tabId, change.mutedInfo.muted);
+    if (change.mutedInfo) this.teller.tell(tabId, change.mutedInfo.muted);
   }
 }
