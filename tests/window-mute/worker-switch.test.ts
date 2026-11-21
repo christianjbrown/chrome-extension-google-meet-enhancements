@@ -1,6 +1,6 @@
 import { WorkerSwitch } from "../../src/window-mute/worker-switch";
 
-function fakeRuntime(answer: { muted: boolean } | undefined) {
+function fakeRuntime(answer: unknown) {
   let heard: (message: unknown) => void = (_message) => undefined;
   return {
     sendMessage: vi.fn().mockResolvedValue(answer),
@@ -33,6 +33,12 @@ describe("WorkerSwitch", () => {
   it("fails when the service worker could not answer", async () => {
     await expect(
       new WorkerSwitch(fakeRuntime(undefined)).state(),
+    ).rejects.toThrow("No answer");
+  });
+
+  it("fails the same way when the answer does not say the sound", async () => {
+    await expect(
+      new WorkerSwitch(fakeRuntime({ muted: "yes" })).toggle(),
     ).rejects.toThrow("No answer");
   });
 
