@@ -74,6 +74,19 @@ describe("service worker", () => {
     expect(chrome.tabs.get).not.toHaveBeenCalled();
   });
 
+  it("ignores a message that is not a request it knows", async () => {
+    const chrome = await load();
+
+    const [keepOpen] = chrome.runtime.onMessage.fire(
+      { type: "something-else" },
+      { tab: { id: 4 } },
+      vi.fn(),
+    );
+
+    expect(keepOpen).toBe(false);
+    expect(chrome.tabs.get).not.toHaveBeenCalled();
+  });
+
   it("tells a tab when its sound changes, and nothing else", async () => {
     const chrome = await load();
 
