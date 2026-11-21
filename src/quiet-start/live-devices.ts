@@ -27,6 +27,29 @@ function isMatchable(node: Node): node is Matchable {
   return node.nodeType === ELEMENT_NODE;
 }
 
+// Only an Element can itself match.
+function isSwitchedOn(node: Searchable): boolean {
+  return isMatchable(node) && node.matches(switchedOn);
+}
+
+function selfIfSwitchedOn(node: Searchable): HTMLElement[] {
+  return isSwitchedOn(node) ? [node as HTMLElement] : [];
+}
+
+// The node itself first, then the buttons inside it.
+function switchedOnIn(node: Searchable): HTMLElement[] {
+  return [
+    ...selfIfSwitchedOn(node),
+    ...node.querySelectorAll<HTMLElement>(switchedOn),
+  ];
+}
+
+function pressAll(buttons: HTMLElement[]): void {
+  buttons.forEach((button) => {
+    button.click();
+  });
+}
+
 export class LiveDevices implements Devices {
   // The attributes whose changes can switch a device on, for main.ts to hand
   // to whatever watches the page.
@@ -39,11 +62,7 @@ export class LiveDevices implements Devices {
   }
 
   turnOff(node: Node): void {
-    // The whole page is a Document, and only an Element can itself match.
-    if (!isSearchable(node)) return;
-    const found = [...node.querySelectorAll<HTMLElement>(switchedOn)];
-    if (isMatchable(node) && node.matches(switchedOn))
-      found.unshift(node as HTMLElement);
-    for (const button of found) button.click();
+    // The whole page is a Document, which can be searched but not matched.
+    if (isSearchable(node)) pressAll(switchedOnIn(node));
   }
 }

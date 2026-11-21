@@ -7,6 +7,14 @@ const ATTRIBUTE_CHANGE: MutationRecordType = "attributes";
 
 export type ObserverFactory = (callback: MutationCallback) => MutationObserver;
 
+// The element whose attribute changed, then every node the record added.
+function report(record: MutationRecord, changed: (node: Node) => void): void {
+  if (record.type === ATTRIBUTE_CHANGE) changed(record.target);
+  record.addedNodes.forEach((node) => {
+    changed(node);
+  });
+}
+
 export class NodeWatcher implements Watcher {
   constructor(
     private readonly observe: ObserverFactory,
@@ -16,12 +24,9 @@ export class NodeWatcher implements Watcher {
 
   watch(changed: (node: Node) => void): () => void {
     const observer = this.observe((records) => {
-      for (const record of records) {
-        if (record.type === ATTRIBUTE_CHANGE) changed(record.target);
-        record.addedNodes.forEach((node) => {
-          changed(node);
-        });
-      }
+      records.forEach((record) => {
+        report(record, changed);
+      });
     });
     observer.observe(this.root, {
       childList: true,

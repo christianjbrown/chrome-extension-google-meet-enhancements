@@ -18,7 +18,8 @@ export class TabMuter implements MuteAnswerer {
 
   async answer(request: MuteRequest, tabId: number): Promise<MuteState> {
     const tab = await this.tabs.get(tabId);
-    const muted = tab.mutedInfo?.muted ?? false;
+    // A tab Chrome says nothing about is not muted.
+    const muted = tab.mutedInfo?.muted === true;
     return { muted: await this.handlers[request.type].handle(tabId, muted) };
   }
 }

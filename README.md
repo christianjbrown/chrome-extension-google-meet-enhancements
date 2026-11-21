@@ -85,7 +85,7 @@ npm test          # the unit tests
 npm run ci        # everything CI checks: format, lint, types, unused code, 100% coverage, build
 ```
 
-`npm run ci` is exactly what CI runs, and coverage has to stay at 100% for lines, branches, functions and statements, or it fails. To run it before every push, point git at the committed hook: `git config core.hooksPath .githooks`.
+`npm run ci` is exactly what CI runs, and coverage has to stay at 100% for lines, branches, functions and statements, or it fails. Lint also holds every function in `src` to a single decision, so full branch coverage means every path gets tested too. To run it before every push, point git at the committed hook: `git config core.hooksPath .githooks`.
 
 How it fits together, all in `src`:
 
