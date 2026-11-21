@@ -1,13 +1,9 @@
-import { WindowMute } from "../../src/window-mute/window-mute";
+import { SoundSync } from "../../src/window-mute/sound-sync";
 
-function setup(meeting = true, state = () => Promise.resolve(true)) {
+function setup(state = () => Promise.resolve(true)) {
   let press = () => undefined as unknown;
   let change: (muted: boolean) => void = (_muted) => undefined;
-  let navigated = () => undefined as unknown;
-  const page = { isMeeting: vi.fn(() => meeting) };
   const button = {
-    show: vi.fn(),
-    hide: vi.fn(),
     set: vi.fn(),
     onPress: (listener: () => void) => {
       press = listener;
@@ -20,40 +16,24 @@ function setup(meeting = true, state = () => Promise.resolve(true)) {
       change = listener;
     },
   };
-  const navigation = {
-    addEventListener: vi.fn((_type: string, listener: () => void) => {
-      navigated = listener;
-    }),
-  };
-  new WindowMute(page, button, sound, navigation).start();
+  new SoundSync(button, sound).start();
   return {
-    page,
     button,
     sound,
-    navigation,
     press: () => press(),
     change: (muted: boolean) => {
       change(muted);
     },
-    navigated: () => navigated(),
   };
 }
 
-describe("WindowMute", () => {
-  it("shows the button on a meeting, set to the tab's current sound", async () => {
+describe("SoundSync", () => {
+  it("sets the button to the tab's current sound", async () => {
     const { button } = setup();
 
-    expect(button.show).toHaveBeenCalled();
     await vi.waitFor(() => {
       expect(button.set).toHaveBeenCalledWith(true);
     });
-  });
-
-  it("keeps the button off pages that are not meetings", () => {
-    const { button } = setup(false);
-
-    expect(button.hide).toHaveBeenCalled();
-    expect(button.show).not.toHaveBeenCalled();
   });
 
   it("flips the sound when pressed, and shows the result", async () => {
@@ -90,24 +70,11 @@ describe("WindowMute", () => {
   });
 
   it("ignores a failed first look at the sound", async () => {
-    const { button, sound } = setup(true, () =>
+    const { button, sound } = setup(() =>
       Promise.reject(new Error("Extension context invalidated")),
     );
 
     await expect(sound.state.mock.results[0]!.value).rejects.toThrow();
     expect(button.set).not.toHaveBeenCalled();
-  });
-
-  it("checks again after Meet moves to another page", () => {
-    const { page, button, navigation, navigated } = setup();
-    expect(navigation.addEventListener).toHaveBeenCalledWith(
-      "navigatesuccess",
-      expect.any(Function),
-    );
-    page.isMeeting.mockReturnValue(false);
-
-    navigated();
-
-    expect(button.hide).toHaveBeenCalled();
   });
 });
