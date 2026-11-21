@@ -3,7 +3,7 @@
 // with a struck-through speaker while you can't, like Meet's own mic button.
 import { ICON_VIEW_BOX, SPEAKER, SPEAKER_OFF } from "./mute-icons";
 import { MUTE_BUTTON_STYLE, PRESSED_ATTRIBUTE } from "./mute-button-style";
-import type { Button } from "./button";
+import type { PlacedButton, SoundButton } from "./button";
 
 const HOST_TAG = "meet-enhancements-mute";
 
@@ -35,7 +35,7 @@ const SHADOW_MODE: ShadowRootMode = "closed";
 const AUDIBLE = { label: "Mute this meeting's sound", icon: SPEAKER };
 const MUTED = { label: "Unmute this meeting's sound", icon: SPEAKER_OFF };
 
-export class MuteButton implements Button {
+export class MuteButton implements PlacedButton, SoundButton {
   private readonly host: HTMLElement;
   private readonly button: HTMLButtonElement;
   private readonly icon: SVGPathElement;

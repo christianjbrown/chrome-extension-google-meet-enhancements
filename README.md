@@ -94,7 +94,8 @@ How it fits together, all in `src`:
 - **`enhancement.ts`** is the one-method interface every enhancement implements.
 - **`node-watcher.ts`** reports nodes Meet adds and elements whose watched attributes change, until told to stop.
 - **`window-mute/`** is the first enhancement:
-  - **`window-mute.ts`** shows the button on meetings, flips the sound when it's pressed, and keeps it in step.
+  - **`sound-sync.ts`** flips the sound when the button is pressed, and keeps the button in step with it.
+  - **`button-placement.ts`** shows the button on meetings and hides it everywhere else.
   - **`mute-button.ts`** draws the button in its own shadow root, so Meet's styles can't touch it.
   - **`meeting-page.ts`** says whether the address is a meeting.
   - **`worker-switch.ts`** is the page's side of the conversation with the service worker.
