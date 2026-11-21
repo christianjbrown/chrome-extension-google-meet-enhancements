@@ -2,7 +2,7 @@
 // touches the page's globals.
 import type { Enhancement } from "./enhancement";
 import { NodeWatcher } from "./node-watcher";
-import { LiveDevices, MUTED_ATTRIBUTE } from "./quiet-start/live-devices";
+import { LiveDevices } from "./quiet-start/live-devices";
 import { NavigationMeetings } from "./quiet-start/meeting-changes";
 import { QuietStart } from "./quiet-start/quiet-start";
 import { PageInput } from "./quiet-start/user-input";
@@ -23,9 +23,11 @@ function windowMute(): Enhancement {
 function quietStart(): Enhancement {
   return new QuietStart(
     new LiveDevices(document),
-    new NodeWatcher((callback) => new MutationObserver(callback), document, [
-      MUTED_ATTRIBUTE,
-    ]),
+    new NodeWatcher(
+      (callback) => new MutationObserver(callback),
+      document,
+      LiveDevices.WATCHED_ATTRIBUTES,
+    ),
     new PageInput(window),
     new NavigationMeetings(navigation),
   );

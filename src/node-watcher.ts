@@ -11,7 +11,7 @@ export class NodeWatcher implements Watcher {
   constructor(
     private readonly observe: ObserverFactory,
     private readonly root: Node,
-    private readonly attributes: string[],
+    private readonly attributes: readonly string[],
   ) {}
 
   watch(changed: (node: Node) => void): () => void {
@@ -27,7 +27,7 @@ export class NodeWatcher implements Watcher {
       childList: true,
       subtree: true,
       attributes: true,
-      attributeFilter: this.attributes,
+      attributeFilter: [...this.attributes],
     });
     return () => {
       observer.disconnect();
