@@ -5,6 +5,12 @@ import { ICON_VIEW_BOX, SPEAKER, SPEAKER_OFF } from "./mute-icons";
 import { MUTE_BUTTON_STYLE, PRESSED_ATTRIBUTE } from "./mute-button-style";
 import type { PlacedButton, SoundButton } from "./button";
 
+// The parts of the page's document the button is built from and put on.
+export type ButtonDocument = Pick<
+  Document,
+  "createElement" | "createElementNS" | "body"
+>;
+
 const HOST_TAG = "meet-enhancements-mute";
 
 const SVG_NAMESPACE = "http://www.w3.org/2000/svg";
@@ -40,7 +46,7 @@ export class MuteButton implements PlacedButton, SoundButton {
   private readonly button: HTMLButtonElement;
   private readonly icon: SVGPathElement;
 
-  constructor(private readonly document: Document) {
+  constructor(private readonly document: ButtonDocument) {
     this.host = document.createElement(HOST_TAG);
     const style = document.createElement(ELEMENT.style);
     style.textContent = MUTE_BUTTON_STYLE;

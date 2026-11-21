@@ -28,23 +28,32 @@ function isMatchable(node: Node): node is Matchable {
 }
 
 // Only an Element can itself match.
-function isSwitchedOn(node: Searchable): boolean {
+function isSwitchedOn(node: Searchable): node is Matchable {
   return isMatchable(node) && node.matches(switchedOn);
 }
 
-function selfIfSwitchedOn(node: Searchable): HTMLElement[] {
-  return isSwitchedOn(node) ? [node as HTMLElement] : [];
+function selfIfSwitchedOn(node: Searchable): Element[] {
+  return isSwitchedOn(node) ? [node] : [];
+}
+
+// Something on the page that can be pressed the way a click would.
+type Pressable = Element & { click(): void };
+
+// Meet's device buttons are HTML elements, which all have click(). Anything
+// else that happens to match is left alone.
+function isPressable(element: Element): element is Pressable {
+  return "click" in element && typeof element.click === "function";
 }
 
 // The node itself first, then the buttons inside it.
-function switchedOnIn(node: Searchable): HTMLElement[] {
+function switchedOnIn(node: Searchable): Pressable[] {
   return [
     ...selfIfSwitchedOn(node),
-    ...node.querySelectorAll<HTMLElement>(switchedOn),
-  ];
+    ...node.querySelectorAll(switchedOn),
+  ].filter(isPressable);
 }
 
-function pressAll(buttons: HTMLElement[]): void {
+function pressAll(buttons: Pressable[]): void {
   buttons.forEach((button) => {
     button.click();
   });

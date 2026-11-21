@@ -3,6 +3,7 @@
 // this up to chrome's message event.
 import type { MuteRequest, MuteState } from "./messages";
 import type { MuteAnswerer } from "./muter";
+import type { RequestGuard } from "./request-guard";
 
 export type Respond = (answer: MuteState | undefined) => void;
 
@@ -14,10 +15,24 @@ interface RequestSender {
 const tabIdOf = (sender: RequestSender): number | undefined => sender.tab?.id;
 
 export class RequestRouter {
-  constructor(private readonly answerer: MuteAnswerer) {}
+  constructor(
+    private readonly answerer: MuteAnswerer,
+    private readonly requests: RequestGuard,
+  ) {}
 
-  // Returns whether the reply channel stays open until the answer arrives.
+  // Returns whether the reply channel stays open until the answer arrives. A
+  // message that is not a request it knows is ignored.
   onMessage(
+    message: unknown,
+    sender: RequestSender,
+    respond: Respond,
+  ): boolean {
+    return (
+      this.requests.accepts(message) && this.answer(message, sender, respond)
+    );
+  }
+
+  private answer(
     request: MuteRequest,
     sender: RequestSender,
     respond: Respond,

@@ -1,8 +1,22 @@
+import type { MuteRequest } from "../../src/window-mute/messages";
 import { RequestRouter } from "../../src/window-mute/request-router";
 
-function setup() {
+// Accepts every message, or none, and keeps what it was asked about.
+function fakeRequests(known: boolean) {
+  const seen: unknown[] = [];
+  return {
+    seen,
+    accepts: (message: unknown): message is MuteRequest => {
+      seen.push(message);
+      return known;
+    },
+  };
+}
+
+function setup(known = true) {
   const answerer = { answer: vi.fn().mockResolvedValue({ muted: true }) };
-  return { answerer, router: new RequestRouter(answerer) };
+  const requests = fakeRequests(known);
+  return { answerer, requests, router: new RequestRouter(answerer, requests) };
 }
 
 describe("RequestRouter", () => {
@@ -41,6 +55,20 @@ describe("RequestRouter", () => {
     const keepOpen = router.onMessage({ type: "toggle-mute" }, {}, vi.fn());
 
     expect(keepOpen).toBe(false);
+    expect(answerer.answer).not.toHaveBeenCalled();
+  });
+
+  it("ignores a message that is not a request it knows", () => {
+    const { answerer, requests, router } = setup(false);
+
+    const keepOpen = router.onMessage(
+      { type: "something-else" },
+      { tab: { id: 4 } },
+      vi.fn(),
+    );
+
+    expect(keepOpen).toBe(false);
+    expect(requests.seen).toEqual([{ type: "something-else" }]);
     expect(answerer.answer).not.toHaveBeenCalled();
   });
 });

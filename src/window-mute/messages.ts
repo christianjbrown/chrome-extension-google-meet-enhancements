@@ -1,11 +1,11 @@
 // What the page and the service worker say to each other. Only the service
 // worker can mute a tab, so the page asks it to.
-export const MUTE_REQUEST = {
-  state: "mute-state",
-  toggle: "toggle-mute",
-} as const;
+import type { STATE_REQUEST } from "./state-request";
+import type { TOGGLE_REQUEST } from "./toggle-request";
 
-export type MuteRequestType = (typeof MUTE_REQUEST)[keyof typeof MUTE_REQUEST];
+// Each request's type is declared in its own module, so a new request is a new
+// module and one line here.
+export type MuteRequestType = typeof STATE_REQUEST | typeof TOGGLE_REQUEST;
 
 export interface MuteRequest {
   type: MuteRequestType;
@@ -23,16 +23,4 @@ export const MUTE_CHANGED = "mute-changed";
 export interface MuteChanged {
   type: typeof MUTE_CHANGED;
   muted: boolean;
-}
-
-export function isMuteChanged(message: unknown): message is MuteChanged {
-  return isObject(message) && hasMuteChangedFields(message);
-}
-
-function isObject(message: unknown): message is object {
-  return typeof message === "object" && message !== null;
-}
-
-function hasMuteChangedFields(message: Partial<MuteChanged>): boolean {
-  return message.type === MUTE_CHANGED && typeof message.muted === "boolean";
 }

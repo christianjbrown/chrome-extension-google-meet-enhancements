@@ -8,7 +8,7 @@ describe("ToggleMute", () => {
   it("mutes an audible tab", async () => {
     const tabs = fakeTabs();
 
-    const muted = await new ToggleMute(tabs).handle(7, false);
+    const muted = await new ToggleMute(tabs).handle({ tabId: 7, muted: false });
 
     expect(tabs.update).toHaveBeenCalledWith(7, { muted: true });
     expect(muted).toBe(true);
@@ -17,7 +17,7 @@ describe("ToggleMute", () => {
   it("unmutes a muted tab", async () => {
     const tabs = fakeTabs();
 
-    const muted = await new ToggleMute(tabs).handle(7, true);
+    const muted = await new ToggleMute(tabs).handle({ tabId: 7, muted: true });
 
     expect(tabs.update).toHaveBeenCalledWith(7, { muted: false });
     expect(muted).toBe(false);
