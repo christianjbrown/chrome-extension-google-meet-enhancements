@@ -100,7 +100,7 @@ How it fits together, all in `src`:
   - **`meeting-page.ts`** says whether the address is a meeting.
   - **`worker-switch.ts`** is the page's side of the conversation with the service worker.
   - **`worker-router.ts`** is the service worker's side: it takes each request from a tab and each change to a tab's sound to the right place.
-  - **`tab-muter.ts`** reads and flips a tab's mute state, and **`tab-teller.ts`** tells the tab when it changes.
+  - **`tab-muter.ts`** reads a tab's mute state and hands the request to its handler: **`report-mute.ts`** just reports it and **`toggle-mute.ts`** flips it. `worker.ts` lists the handlers, so a new kind of request is a new class plus one line there. **`tab-teller.ts`** tells the tab when its sound changes.
   - **`messages.ts`** is what the two sides say to each other.
 - **`quiet-start/`** starts meetings with the camera and mic off:
   - **`quiet-start.ts`** switches things off until your first click or key, and starts again in a new meeting.
