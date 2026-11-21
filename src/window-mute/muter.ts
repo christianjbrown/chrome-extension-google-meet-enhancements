@@ -1,5 +1,5 @@
-// What the service worker's router needs from the tabs: one side answers a
-// page's request about its own tab, the other tells a tab its sound changed.
+// What the service worker's routers need from the tabs: one answers a page's
+// request about its own tab, the other tells a tab its sound changed.
 import type { MuteRequest, MuteState } from "./messages";
 
 export interface MuteAnswerer {
